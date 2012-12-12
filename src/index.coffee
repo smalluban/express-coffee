@@ -44,8 +44,9 @@ app.get '/assets/:file', (req, res) -> # Set static path for multilanguage asset
 #
 
 # Get root_path return index view
-app.get '/*', require('./controllers/home').index
-
+app.get '/*', (req, resp) -> 
+  resp.render 'index'
+  
 #
 # APP START
 #
