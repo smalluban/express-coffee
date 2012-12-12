@@ -34,10 +34,9 @@ app.get '/assets/:file', (req, res) -> # Set static path for multilanguage asset
 
   #check if file exists
   if not fs.existsSync(process.cwd() + '/public/_' + lng + '/' + file)
-    lng = lng.replace(/\-.*/,'') 
-    if not fs.existsSync(process.cwd() + '/public/_' + lng + '/' + file)
-      lng = lang 
-
+    lng = lng.replace(/\-.*/,'')
+    if not fs.existsSync(process.cwd() + '/public/_' + lng + '/' + file) then lng = lang
+      
   res.sendfile './public/_' + lng + '/' + file, maxAge: 60 * 60 * 24
 
 #
