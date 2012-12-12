@@ -1,7 +1,7 @@
 express = require 'express'
-stylus = require 'stylus'
 assets = require 'connect-assets'
 i18n = require 'i18next'
+fs = require 'fs'
 
 #
 # APP SETUP
@@ -13,7 +13,7 @@ app.use express.static(process.cwd() + '/public') # Set the public folder as sta
 app.set 'view engine', 'jade' # Set View Engine
 
 # Set default lang
-lang = 'pl' 
+lang = 'en' 
 
 i18n.init 
   resGetPath: 'locales/__lng__.json' # Shorter path for locales
@@ -26,13 +26,19 @@ i18n.addPostProcessor "jade", (val, key, opts) ->
    require('jade').compile(val, opts)()
 
 i18n.registerAppHelper app # Register tempalte helper
-app.use i18n.handle # Run i18n
+app.use i18n.handle # Run i18n as handle
 
-# set Asset path for i18n
-# You hate to prepare settings.langPath for using locale assets
-app.locals
-  langPath: () ->
-    i18n.t('settings.langPath', {defaultValue: lang })
+app.get '/assets/:file', (req, res) -> # Set static path for multilanguage assets
+  file = req.params.file
+  lng = i18n.lng()
+
+  #check if file exists
+  if not fs.existsSync(process.cwd() + '/public/_' + lng + '/' + file)
+    lng = lng.replace(/\-.*/,'') 
+    if not fs.existsSync(process.cwd() + '/public/_' + lng + '/' + file)
+      lng = lang 
+
+  res.sendfile './public/_' + lng + '/' + file, maxAge: 60 * 60 * 24
 
 #
 # APP ROUTES
