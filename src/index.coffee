@@ -10,12 +10,16 @@ i18n = require 'i18next'
 app = express() # Add Connect Assets
 app.use assets() # Set the public folder as static assets
 app.use express.static(process.cwd() + '/public') # Set View Engine
-app.set 'view engine', 'jade' # Configrue i18n
+app.set 'view engine', 'jade' # Configrue template
+
+# Set default lang
+lang = 'pl' 
 
 i18n.init 
   resGetPath: 'locales/__lng__.json' # Shorter path for locales
   #lng: "pl-PL" # Uncomment to set defualt language
-  fallbackLng: "pl-PL"
+  fallbackLng: lang
+  #load: 'unspecific'
 
 # Jade i18n proccessing
 i18n.addPostProcessor "jade", (val, key, opts) ->
@@ -23,6 +27,12 @@ i18n.addPostProcessor "jade", (val, key, opts) ->
 
 i18n.registerAppHelper app # Register tempalte helper
 app.use i18n.handle # Run i18n
+
+# set Asset path for i18n
+# You hate to prepare settings.langPath for using locale assets
+app.locals
+  langPath: () ->
+    i18n.t('settings.langPath', {defaultValue: lang })
 
 #
 # APP ROUTES
