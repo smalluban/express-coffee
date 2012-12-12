@@ -7,10 +7,10 @@ i18n = require 'i18next'
 # APP SETUP
 #
 
-app = express() # Add Connect Assets
-app.use assets() # Set the public folder as static assets
-app.use express.static(process.cwd() + '/public') # Set View Engine
-app.set 'view engine', 'jade' # Configrue template
+app = express() # Create Express
+app.use assets() # Add Connect Assets
+app.use express.static(process.cwd() + '/public') # Set the public folder as static assets
+app.set 'view engine', 'jade' # Set View Engine
 
 # Set default lang
 lang = 'pl' 
