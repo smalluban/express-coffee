@@ -8,7 +8,7 @@ fs = require 'fs'
 #
 
 app = express() # Create Express
-app.use assets() # Add Connect Assets
+app.use assets(detectChanges: not (process.env.NODE_ENV == 'production')) # Add Connect Assets
 app.use express.static(process.cwd() + '/public') # Set the public folder as static assets
 app.set 'view engine', 'jade' # Set View Engine
 
@@ -28,8 +28,8 @@ i18n.addPostProcessor "jade", (val, key, opts) ->
 i18n.registerAppHelper app # Register tempalte helper
 app.use i18n.handle # Run i18n as handle
 
-app.get '/assets/:file', (req, res) -> # Set static path for multilanguage assets
-  file = req.params.file
+app.get '/assets/*', (req, res) -> # Set static path for multilanguage assets
+  file = req.params[0]
   lng = i18n.lng()
 
   #check if file exists
