@@ -42,3 +42,8 @@ npm install docco -g
 ```
 cake dev
 ```
+
+## Thanks
+
+This project was created on [twilson63/express-coffee](https://github.com/twilson63/express-coffee). 
+Thanks for sharing code.
